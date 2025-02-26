@@ -1,55 +1,93 @@
-openapi: 3.0.0
-info:
-  title: "OWASP Juice Shop API"
-  description: "API documentation for OWASP Juice Shop"
-  version: "1.0.0"
-servers:
-  - url: "/rest"
-paths:
-  /products:
-    get:
-      summary: "Get all products"
-      operationId: getProducts
-      responses:
-        "200":
-          description: "List of all products"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-  /user/login:
-    post:
-      summary: "User login"
-      operationId: userLogin
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: "user@juiceshop.com"
-                password:
-                  type: string
-                  example: "password123"
-      responses:
-        "200":
-          description: "Successful login"
-        "401":
-          description: "Unauthorized"
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-security:
-  - bearerAuth: []
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OWASP Juice Shop API",
+    "version": "1.0.0",
+    "description": "API documentation for OWASP Juice Shop"
+  },
+  "servers": [
+    {
+      "url": "/rest"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Get all products",
+        "operationId": "getProducts",
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "name": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "User login",
+        "operationId": "userLogin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "example": "user@juiceshop.com" },
+                  "password": { "type": "string", "example": "password123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Successful login" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/basket/{id}": {
+      "get": {
+        "summary": "Get basket contents",
+        "operationId": "getBasket",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Basket details" },
+          "404": { "description": "Basket not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    { "bearerAuth": [] }
+  ]
+}
